@@ -9,18 +9,11 @@ message.From.Add(from);
 var to = new MailboxAddress("Alexandru", "cristian.teodorescu97@yahoo.com");
 message.To.Add(to);
 message.Subject = "Let's test MimeKit for a simple email demo.";
-message.Body = new TextPart(TextFormat.Plain) 
-{
-    Text = """
-
-    Hello Alexandru,
-
-    Let's test the functionality of MimeKit library in a simple email!
-
-    Thanks,
-    Cristi
-    """
-};
+var bb = new BodyBuilder();
+bb.TextBody = "Hello world in plain text!";
+bb.HtmlBody = "<p>Hello world <em>in HTML!</em></p>";
+bb.Attachments.Add("test.jpeg");
+message.Body = bb.ToMessageBody();  
 
 using var smtp = new SmtpClient();
 await smtp.ConnectAsync("localhost", 1025);
